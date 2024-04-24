@@ -15,12 +15,12 @@ import java.util.List;
 public class RatingResource {
 
     @GetMapping("/{movieId}")
-    public Rating getRating(@PathVariable("movieId") int movieId){
+    public Rating getRating(@PathVariable("movieId") int movieId) {
         return new Rating(1, 4);
     }
 
     @GetMapping("/users/{userId}")
-    public UserRating getUserRating(@PathVariable("userId") int userId){
+    public UserRating getUserRating(@PathVariable("userId") int userId) {
         List<Rating> ratings = Arrays.asList(
                 new Rating(11, 4),
                 new Rating(22, 3)

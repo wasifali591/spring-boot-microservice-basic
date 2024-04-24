@@ -31,7 +31,7 @@ public class MovieCatalogResource {
 
     @GetMapping("/{userId}")
 //    @HystrixCommand(fallbackMethod = "getFallbackCatalog")
-    public List<CatalogItem> getCatalog(@PathVariable("userId") int userId){
+    public List<CatalogItem> getCatalog(@PathVariable("userId") int userId) {
 
         //call userRating service to get the details
         UserRating userRating = userRatingService.getUserRating(userId);
@@ -40,6 +40,7 @@ public class MovieCatalogResource {
             return movieInfoService.getCatalogItem(rating);
         }).collect(Collectors.toList());
     }
+
     public List<CatalogItem> getFallbackCatalog(@PathVariable("userId") int userId) {
         return Arrays.asList((new CatalogItem("No Movie!", "", 0)));
     }
