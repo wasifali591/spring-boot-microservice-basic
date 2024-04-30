@@ -1,5 +1,7 @@
 package com.example.moviecatalogservice.services;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+import com.example.moviecatalogservice.exceptions.MovieNotFound;
 import com.example.moviecatalogservice.models.CatalogItem;
 import com.example.moviecatalogservice.models.Movie;
 import com.example.moviecatalogservice.models.Rating;
@@ -28,10 +30,11 @@ public class MovieInfoService {
                     @HystrixProperty(name = "maxQueueSize", value = "10")
             })
     public CatalogItem getCatalogItem(Rating rating) {
-        //for each movie id, call movie info service and get details
-        Movie movie = restTemplate.getForObject("http://movie-info-service/movies/" + rating.getMovieId(), Movie.class);
-        //put them all together
-        return new CatalogItem(movie.getName(), movie.getDescription(), rating.getRating());
+
+            //for each movie id, call movie info service and get details
+            Movie movie = restTemplate.getForObject("http://movie-info-service/movies/" + rating.getMovieId(), Movie.class);
+            //put them all together
+            return new CatalogItem(movie.getName(), movie.getDescription(), rating.getRating());
     }
 
     public CatalogItem getFallbackCatalogItem(Rating rating) {
