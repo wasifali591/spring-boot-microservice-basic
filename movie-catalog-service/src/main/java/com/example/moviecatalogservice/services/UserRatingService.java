@@ -17,19 +17,20 @@ public class UserRatingService {
     private RestTemplate restTemplate;
 
     @HystrixCommand(fallbackMethod = "getFallbackUserRating",
-            commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
-                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
-                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-                    @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000"),
-            },
-            threadPoolKey = "userRatingsPool",
-            threadPoolProperties = {
-                    @HystrixProperty(name = "coreSize", value = "20"),
-                    @HystrixProperty(name = "maxQueueSize", value = "10")
-            })
+//            commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
+//                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
+//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+//                    @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000"),
+//            },
+            threadPoolKey = "defaultHystrixThreadPoolProperties"
+//            threadPoolProperties = {
+//                    @HystrixProperty(name = "coreSize", value = "20"),
+//                    @HystrixProperty(name = "maxQueueSize", value = "10")
+//            }
+            )
     public UserRating getUserRating(@PathVariable("userId") int userId) {
-        return restTemplate.getForObject("http://rating-data-service/ratings/users/1", UserRating.class);
+        return restTemplate.getForObject("http://gateway-server/ratings/users/1", UserRating.class);
     }
 
     public UserRating getFallbackUserRating(@PathVariable("userId") int userId) {

@@ -18,21 +18,23 @@ public class MovieInfoService {
     private RestTemplate restTemplate;
 
     @HystrixCommand(fallbackMethod = "getFallbackCatalogItem",
-            commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
-                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
-                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-                    @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000"),
-            },
-            threadPoolKey = "movieInfoPool",
-            threadPoolProperties = {
-                    @HystrixProperty(name = "coreSize", value = "20"),
-                    @HystrixProperty(name = "maxQueueSize", value = "10")
-            })
+//            commandProperties = "defaultHystrixCommandProperties",
+//                    {
+//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
+//                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
+//                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+//                    @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000"),
+//            },
+            threadPoolKey = "defaultHystrixThreadPoolProperties"
+//            threadPoolProperties = {
+//                    @HystrixProperty(name = "coreSize", value = "20"),
+//                    @HystrixProperty(name = "maxQueueSize", value = "10")
+//            }
+            )
     public CatalogItem getCatalogItem(Rating rating) {
 
             //for each movie id, call movie info service and get details
-            Movie movie = restTemplate.getForObject("http://movie-info-service/movies/" + rating.getMovieId(), Movie.class);
+            Movie movie = restTemplate.getForObject("http://gateway-server/movies/" + rating.getMovieId(), Movie.class);
             //put them all together
             return new CatalogItem(movie.getName(), movie.getDescription(), rating.getRating());
     }
